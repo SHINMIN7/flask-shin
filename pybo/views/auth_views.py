@@ -74,21 +74,21 @@ def login_required(view):
 
 
 
-
-@bp.route('/deposit', methods = ('GET', 'POST'))
+@bp.route('/deposit/', methods = ('POST','GET'))
 @login_required
 def deposit():
     form = DepositForm()
-    if form.validate_on_submit():
-        deposit = Deposit(amount=form.amount.data,timestamp = datetime.utcnow(), user=g.user)
-        db.session.add(deposit)
+    if request.method == 'POST' and form.validate_on_submit():
+        deposit = Deposit(amount=form.amount.data, user_id = g.user.id)
         User.balance += form.amount.data
         db.session.commit()
+        flash('You Have Deposited ${}.'.format(deposit.amount),'success')
         return redirect('/')
-    return render_template('deposit_form.html', form=form)
+    
+    return render_template('auth/deposit.html', form=form)
 
 
-@bp.route('/withdraw', methods=('GET', 'POST'))
+@bp.route('/withdraw', methods=('POST',))
 @login_required
 def withdraw():
     form = WithdrawForm()

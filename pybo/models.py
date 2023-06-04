@@ -10,25 +10,29 @@ class Question(db.Model):
     
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(150), unique=True, nullable=False)
+    username = db.Column(db.String(150), unique=True, nullable = False)
     password = db.Column(db.String(200), nullable=False)
-    balance = db.Column(db.Float,default = 0.0) #잔액
+    balance = db.Column(db.Integer, default=0) #잔액
 
  #입금 모델   
 class Deposit(db.Model):
-    id = db.Column(db.Integer, primary_key=True) #입금 고유번호
+    id = db.Column(db.Integer, primary_key=True) #입금 데이터의 고유번호
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete = 'CASCADE'),nullable = False) 
+    #유저 데이터의 고유 번호, 어떤 유저 계정에 대한 입금인지 알아야 하므로
     amount = db.Column(db.Integer, nullable = False) # 입금 금액
-    timestamp = db.Column(db.DateTime, datetime.utcnow) # 입금 시간
-    user_id = db.Column(db.Integer, db.ForeignKey('User.id')) #기존 유저 모델과 연결
+    timestamp = db.Column(db.DateTime(), nullable = True) # 입금 시간
+   
+    
     #유저 계정과 연동하기 위해 추가
 
     
 #출금 모델
 class Withdraw(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    amount = db.Column(db.Integer, nullable = False)
-    timestamp = db.Column(db.DateTime, datetime.utcnow) 
-    user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
+    id = db.Column(db.Integer, primary_key=True) #출금 고유번호
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete = 'CASCADE'),nullable = False)
+    amount = db.Column(db.Integer, nullable = False) #출금 금액
+    timestamp = db.Column(db.DateTime(), nullable = True)  #출금 시간
+
 
 
 

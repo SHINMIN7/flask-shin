@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, PasswordField,  FloatField, SubmitField
+from wtforms import StringField, TextAreaField, PasswordField,  IntegerField, SubmitField
 from wtforms.validators import DataRequired, Length, EqualTo, NumberRange# ValidationError
 
 
@@ -20,18 +20,14 @@ class UserLoginForm(FlaskForm):
     password = PasswordField('비밀번호', validators=[DataRequired()])
 
 
-#입출금 기능
+#입금가능한 폼 작성
 class DepositForm(FlaskForm):
-    amount = FloatField('Amount', validators=[DataRequired(),NumberRange(min=0.01)])
-    submit = SubmitField('Deposit')
+    amount = IntegerField('Amount', validators=[DataRequired(),NumberRange(min=1)])
+    #submit = SubmitField('Deposit')
 
+#출금가능한 폼 작성
 class WithdrawForm(FlaskForm):
-    amount = FloatField('Amount', validators=[DataRequired(),NumberRange(min=0.01)])
-    submit = SubmitField("Withdraw")
+    amount = IntegerField('Amount', validators=[DataRequired(),NumberRange(min=1)])
+    #submit = SubmitField("Withdraw")
     
-    # def __init__(self, user, *args, **kwargs):
-    #         self.user = user
-    #         super().__init__(*args, **kwargs)
-    # def vaildate_amount(self,amount):
-    #     if self.user.account.balance < amount.data:
-    #         raise ValidationError('계좌 잔액보다 더 많은 돈을 출금할 수 없습니다.')        
+       

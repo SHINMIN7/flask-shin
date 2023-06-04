@@ -11,10 +11,16 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                {% if g.user %}
+                {% if g.user %} <!-- 만약 로그인 되어있는 상태라면 -->
                 <ul class="navbar-nav">
-                    <li class="nav-item ">
+                    <li class="nav-item "> <!-- 로그아웃할수 있는 창과-->
                         <a class="nav-link" href="{{ url_for('auth.logout') }}">{{ g.user.username }} (로그아웃)</a>
+                    </li>
+                    <li class="nav-item "> <!-- 입금할 수 있는 창 , 질문 등록 url-->
+                        <a class="nav-link" href="{{ url_for('auth.deposit') }}">입금하기</a> 
+                    </li>
+                    <li class="nav-item "> <!-- 출금할 수 있는 창이 표시된다.-->
+                        <a class="nav-link" href="{{ url_for('auth.withdraw') }}">출금하기</a> 
                     </li>
                 </ul>
                 {% else %}
