@@ -23,4 +23,9 @@ def create_app():
     app.register_blueprint(question_views.bp)
     app.register_blueprint(auth_views.bp)
     
+    #from transactions import transactions
+    #app.register_blueprint(transactions, url_prefix='/transaction')
+    
+    
+    
     return app

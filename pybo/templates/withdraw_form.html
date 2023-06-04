@@ -1,0 +1,31 @@
+{% extends 'base.html' %}: This line extends a base template, assuming you have a base.html template that defines the common structure of your web pages.
+
+{% block title %}Withdraw{% endblock %}: This block defines the title of the page, which will be displayed in the browser's title bar.
+
+{% block content %}: This block defines the main content of the page.
+
+<h2>Withdraw</h2>: This line displays a heading for the withdrawal section.
+
+<form method="POST" action="{{ url_for('withdraw') }}">: This line defines a form that will be submitted to the withdraw route when the user clicks the "Withdraw" button. It specifies the HTTP method as POST and the action URL as the withdraw route using the url_for function.
+
+{{ form.csrf_token }}: This line adds a CSRF token field to the form to protect against cross-site request forgery attacks.
+
+<div class="form-group">: This line starts a form group container for the withdrawal amount field.
+
+{{ form.amount.label }}: This line displays the label for the withdrawal amount field.
+
+{{ form.amount(class="form-control") }}: This line renders the withdrawal amount field as a form control, applying the form-control class to the input element.
+
+{% for error in form.amount.errors %}: This line starts a loop that iterates over any validation errors for the withdrawal amount field.
+
+<span class="text-danger">{{ error }}</span>: This line displays each validation error message in red text.
+
+</div>: This line closes the form group container for the withdrawal amount field.
+
+{% if error_message %}: This line checks if there is an error message to display.
+
+<div class="alert alert-danger">{{ error_message }}</div>: This line displays the error message in a red alert box if it exists.
+
+<button type="submit" class="btn btn-primary">Withdraw</button>: This line creates a submit button for the form, styled as a primary button.
+
+{% endblock %}: This line ends the content block.

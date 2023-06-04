@@ -1,10 +1,12 @@
 from flask import Blueprint, url_for, render_template, flash, request, session, g
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import redirect
+import functools
+from datetime import datetime
 
 from pybo import db
-from pybo.forms import UserCreateForm, UserLoginForm
-from pybo.models import User
+from pybo.forms import UserCreateForm, UserLoginForm, DepositForm, WithdrawForm
+from pybo.models import User, Deposit, Withdraw
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -37,7 +39,11 @@ def login():
         if error is None:
             session.clear()
             session['user_id'] = user.id
-            return redirect(url_for('main.index'))
+            _next = request.args.get('next', '')
+            if _next:
+                return redirect(_next)
+            else:
+                return redirect(url_for('main.index'))            
         flash(error)
     return render_template('auth/login.html', form=form)
 
@@ -54,4 +60,49 @@ def load_logged_in_user():
 @bp.route('/logout/')
 def logout():
     session.clear()
-    return redirect(url_for('main.index'))        
+    return redirect(url_for('main.index'))    
+
+def login_required(view):
+    @functools.wraps(view)
+    def wrapped_view(*args, **kwargs):
+        if g.user is None:
+            _next = request.url if request.method == 'GET' else ''
+            return redirect(url_for('auth.login', next=_next))
+        return view(*args, **kwargs)
+    return wrapped_view 
+
+
+
+
+
+@bp.route('/deposit', methods = ('GET', 'POST'))
+@login_required
+def deposit():
+    form = DepositForm()
+    if form.validate_on_submit():
+        deposit = Deposit(amount=form.amount.data,timestamp = datetime.utcnow(), user=g.user)
+        db.session.add(deposit)
+        User.balance += form.amount.data
+        db.session.commit()
+        return redirect('/')
+    return render_template('deposit_form.html', form=form)
+
+
+@bp.route('/withdraw', methods=('GET', 'POST'))
+@login_required
+def withdraw():
+    form = WithdrawForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if form.amount.data <= user.balance:
+            user.balance -= form.amount.data
+            db.session.commit()
+            return redirect('/')
+        else:
+            error_message = 'Insufficient balance.'
+    return render_template('withdraw_form.html', form=form, error_message=error_message)
+
+
+
+
+
