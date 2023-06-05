@@ -5,8 +5,8 @@ import functools
 from datetime import datetime
 
 from pybo import db
-from pybo.forms import UserCreateForm, UserLoginForm, DepositForm, WithdrawForm
-from pybo.models import User, Deposit, Withdraw
+from pybo.forms import UserCreateForm, UserLoginForm
+from pybo.models import User
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -15,12 +15,13 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 def signup():
     form = UserCreateForm()
     if request.method == 'POST' and form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if not user:
-            user = User(username=form.username.data,
+        user = User.query.filter_by(username=form.username.data).first() #유저 정보를 찾고
+        if not user: #만약 유저가 아니라면
+            user = User(username=form.username.data, #유저 정보를 저장
                         password=generate_password_hash(form.password1.data))
-            db.session.add(user)
-            db.session.commit()
+            
+            db.session.add(user) # db에 유저 정보 추가
+            db.session.commit() # 유저 정보 저장
             return redirect(url_for('main.index'))
         else:
             flash('이미 존재하는 사용자입니다.')
@@ -74,35 +75,6 @@ def login_required(view):
 
 
 
-@bp.route('/deposit/', methods = ('POST','GET'))
-@login_required
-def deposit():
-    form = DepositForm()
-    if request.method == 'POST' and form.validate_on_submit():
-        deposit = Deposit(amount=form.amount.data, user_id = g.user.id)
-        User.balance += form.amount.data
-        db.session.commit()
-        flash('You Have Deposited ${}.'.format(deposit.amount),'success')
-        return redirect('/')
-    
-    return render_template('auth/deposit.html', form=form)
-
-
-@bp.route('/withdraw', methods=('POST',))
-@login_required
-def withdraw():
-    form = WithdrawForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if form.amount.data <= user.balance:
-            user.balance -= form.amount.data
-            db.session.commit()
-            return redirect('/')
-        else:
-            error_message = 'Insufficient balance.'
-    return render_template('withdraw_form.html', form=form, error_message=error_message)
-
-
-
+#*args
 
 

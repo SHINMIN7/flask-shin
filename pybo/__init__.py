@@ -32,14 +32,11 @@ def create_app():
     from . import models
 
     # 블루프린트
-    from .views import main_views, question_views, auth_views
+    from .views import main_views, question_views, auth_views, account_views
     app.register_blueprint(main_views.bp)
     app.register_blueprint(question_views.bp)
     app.register_blueprint(auth_views.bp)
-    
-    #from transactions import transactions
-    #app.register_blueprint(transactions, url_prefix='/transaction')
-    
+    app.register_blueprint(account_views.bp)
     
     
     return app

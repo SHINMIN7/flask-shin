@@ -22,12 +22,12 @@ class UserLoginForm(FlaskForm):
 
 #입금가능한 폼 작성
 class DepositForm(FlaskForm):
-    amount = IntegerField('Amount', validators=[DataRequired(),NumberRange(min=1)])
+    amount = IntegerField('Amount', validators=[DataRequired('입금 금액을 입력해 주세요'),NumberRange(min=1)])
     #submit = SubmitField('Deposit')
 
 #출금가능한 폼 작성
 class WithdrawForm(FlaskForm):
-    amount = IntegerField('Amount', validators=[DataRequired(),NumberRange(min=1)])
-    #submit = SubmitField("Withdraw")
+    amount = IntegerField('Amount', validators=[DataRequired('출금 금액을 입력해 주세요'),NumberRange(min=1)])
+
     
        

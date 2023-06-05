@@ -16,11 +16,14 @@
                     <li class="nav-item "> <!-- 로그아웃할수 있는 창과-->
                         <a class="nav-link" href="{{ url_for('auth.logout') }}">{{ g.user.username }} (로그아웃)</a>
                     </li>
-                    <li class="nav-item "> <!-- 입금할 수 있는 창 , 질문 등록 url-->
-                        <a class="nav-link" href="{{ url_for('auth.deposit') }}">입금하기</a> 
+                    <li class="nav-item "> <!-- 내 계정-->
+                        <a class="nav-link" href="{{ url_for('account.myaccount') }}">내 계정</a>
                     </li>
-                    <li class="nav-item "> <!-- 출금할 수 있는 창이 표시된다.-->
-                        <a class="nav-link" href="{{ url_for('auth.withdraw') }}">출금하기</a> 
+                    <li class="nav-item "> 
+                        <a class="nav-link" href="{{ url_for('account.deposit') }}">입금하기</a>
+                    </li>
+                    <li class="nav-item "> 
+                        <a class="nav-link" href="{{ url_for('account.withdraw') }}">인출하기</a>
                     </li>
                 </ul>
                 {% else %}
