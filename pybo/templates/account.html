@@ -1,15 +1,6 @@
-{% extends 'base.html' %}
-
-<!-- 계정 잔액 확인하기-->
-<div class="container">
-    <h5 class="my-3 border-bottom pb-2">Balance</h5>
-    <form method="account" class="balance">
-        {{ form.csrf_token}}
-        <div class="mb-3">
-            <h4 class="card"><b>Account Balance: </b>${{ g.user.balance }}</h4>
-        </div>
-        <button type="submit" class="btn btn-primary">출금하기</button>
-    </form>
-</div>
-
-
+<!-- sign_in.html -->
+{% extends "base.html" %}
+<h1>{{user.id}}</h1>
+<div>
+    {{user.balance}}
+</div>   

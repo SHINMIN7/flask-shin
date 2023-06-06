@@ -16,13 +16,16 @@ class User(db.Model):
     
 
     
+
+    
     
  #입금 모델   
 class Deposit(db.Model):
     id = db.Column(db.Integer, primary_key=True) #입금 데이터의 고유번호
     account_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete = 'CASCADE')) # 계정 모델과 연동
     #입금 모델은 어느 계정에 대한 입금인지 알아야 하므로 계정 모델과 연결된 속성 포함해야 함
-    #account = db.relationship('User',backref = db.backref('deposit_set', )) 
+    user_id = db.relationship('User',backref = db.backref('deposit_set'))
+
     amount = db.Column(db.Integer, nullable = False) # 입금 금액
     #timestamp = db.Column(db.DateTime(), nullable = True) # 입금 시간
     #유저 데이터의 고유 번호, 어떤 유저 계정에 대한 입금인지 알아야 하므로
